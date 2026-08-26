@@ -9,8 +9,8 @@
 class Concealer < Formula
   desc "Local-only, single-file secret manager over SOPS + age (CLI · Web UI · MCP)"
   homepage "https://github.com/fxerkan/concealer"
-  url "https://github.com/fxerkan/concealer/archive/refs/tags/v0.9.0.tar.gz"
-  sha256 "6c360fc2c0384e6e7bb422aff09f7fcfd57d17fbbd51c7c39c4c4ff64a925ac4"
+  url "https://github.com/fxerkan/concealer/archive/refs/tags/v0.9.10.tar.gz"
+  sha256 "f1d2c67df6f266d5289abef54d1fda279e834ee028891b8e3cfd48b643e138b6"
   license "MIT"
 
   # Kullanici sops/age/expect'i AYRICA kurmak zorunda kalmasin — hepsi burada.
