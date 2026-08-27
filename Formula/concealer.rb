@@ -1,11 +1,11 @@
 # Homebrew formula for concealer.
 #
-# Bu dosyayi tap deposuna (github.com/fxerkan/homebrew-tap) Formula/concealer.rb
-# olarak koyun. Kullanicilar:  brew install fxerkan/tap/concealer
+# Place this file in the tap repo (github.com/fxerkan/homebrew-tap) as Formula/concealer.rb.
+# Users then run:  brew install fxerkan/tap/concealer
 #
-# Yeni surumde guncelleme (PACKAGING.md'ye bakin):
-#   1) git tag v0.3.0 && git push --tags
-#   2) url'i tag'e gore ayarla, sonra:  shasum -a 256 <tarball>  → sha256'yi yapistir
+# To update for a new release (see PACKAGING.md):
+#   1) git tag v0.9.14 && git push --tags
+#   2) point url at the tag, then:  shasum -a 256 <tarball>  → paste the sha256
 class Concealer < Formula
   desc "Local-only, single-file secret manager over SOPS + age (CLI · Web UI · MCP)"
   homepage "https://github.com/fxerkan/concealer"
@@ -13,10 +13,10 @@ class Concealer < Formula
   sha256 "f6634b3b3774811bb04b7ba7e40fddc6c60135f8887c73191f7b3e34e463be2b"
   license "MIT"
 
-  # Kullanici sops/age/expect'i AYRICA kurmak zorunda kalmasin — hepsi burada.
+  # Bundle sops/age/expect so users don't have to install them separately.
   depends_on "age"
   depends_on "expect"
-  # macOS'ta python3 sistemde var; Linux/temiz kurulumda garanti icin:
+  # python3 ships with macOS; require it explicitly for Linux/clean installs.
   depends_on "python@3.13"
   depends_on "sops"
 
@@ -24,25 +24,25 @@ class Concealer < Formula
     libexec.install "concealer", "webui.html"
     (libexec/"concealer").chmod 0755
     bin.install_symlink libexec/"concealer"
-    bin.install_symlink libexec/"concealer" => "cer" # kisa alias
+    bin.install_symlink libexec/"concealer" => "cer" # short alias
   end
 
   def caveats
     <<~EOS
-      Vault'unuz varsayilan olarak ~/.concealer altinda saklanir.
-      Baslamak icin:
-        concealer init          # master parola + recovery kodlari + CLI token uretir
-        export CONCEALER_TOKEN=… # init ciktisindaki satiri calistirin
-        concealer web 8787      # web arayuzu:  http://localhost:8787
+      Your vault is stored under ~/.concealer by default.
+      To get started:
+        concealer init          # generates a master password + recovery codes + a CLI token
+        export CONCEALER_TOKEN=… # run the line printed by init
+        concealer web 8787      # web UI:  http://localhost:8787
 
-      Detayli yardim ve ornekler:  concealer help
+      Detailed help and examples:  concealer help
     EOS
   end
 
   test do
     assert_match "concealer #{version}", shell_output("#{bin}/concealer version")
     assert_match "USAGE", shell_output("#{bin}/concealer help")
-    # bagimliliklar PATH'te olmali (brew bunlari kurar)
-    %w[sops age age-keygen expect].each { |b| assert which(b), "#{b} PATH'te yok" }
+    # dependencies must be on PATH (brew installs them)
+    %w[sops age age-keygen expect].each { |b| assert which(b), "#{b} not on PATH" }
   end
 end
